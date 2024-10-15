@@ -1,0 +1,67 @@
+# Reading Data (assuming working directory has been set)
+setwd("/Users/pratishrutkamal/Downloads/Pratishrut_Kamal_HW1")
+voting_data <- read.csv('Homework1_Bonds.csv')
+
+# Question 1, Part 1: How many of these bonds were approved by voters, and how many were defeated?
+approved <- sum(voting_data$VotesFor)
+print(approved)
+
+defeated <- sum(voting_data$VotesAgainst)
+print(defeated)
+# Question 1, Part 2: Are there any differences in the rates of approved bonds across the four different government types?
+# looking at the names of the 4 differnet types of government
+unique(voting_data$Type)
+# assigning a vector for each government type
+city <- voting_data[voting_data$Type == 'CITY',]
+
+isd <- voting_data[voting_data$Type == 'ISD',]
+
+wd <- voting_data[voting_data$Type == 'WD',]
+
+county <- voting_data[voting_data$Type == 'COUNTY',]
+
+# Calculating approval rates using VotesFor and VotesAgainst
+city_approval_rates <- sum(city$VotesFor) / (sum(city$VotesAgainst) + sum(city$VotesFor))
+print(city_approval_rates)
+
+isd_approval_rates <- sum(isd$VotesFor) / (sum(isd$VotesAgainst) + sum(isd$VotesFor))
+print(isd_approval_rates)
+
+wd_approval_rates <- sum(wd$VotesFor) / (sum(wd$VotesAgainst) + sum(wd$VotesFor))
+print(wd_approval_rates)
+
+county_approval_rates <- sum(county$VotesFor) / (sum(county$VotesAgainst) + sum(county$VotesFor))
+print(county_approval_rates)
+# Each of these aboveare the corresponding approval rates for each type of government
+
+# Question 2: When and where did the bond measure with the highest voter turnout occur?  What was it for?
+# Found the total votes done in each local government entity
+voting_data$Votes_Total <- voting_data$VotesAgainst + voting_data$VotesFor
+
+# finding the data for the local government entity that voted the most
+max_name <- voting_data$Name[which.max(voting_data$Votes_Total)]
+max_electiondate <- voting_data$ElectionDate[which.max(voting_data$Votes_Total)]
+max_purpose <- voting_data$Purpose[which.max(voting_data$Votes_Total)]
+max_amt <- voting_data$Votes_Total[which.max(voting_data$Votes_Total)]
+print(max_name)
+print(max_electiondate)
+print(max_purpose)
+print(max_amt)
+# Harris County Goated
+
+# Question 3: Create a new variable within the subset dataframe that gives the percentage of total votes that were for the bond measure and make a graph of the distribution of this new variable.  Describe its distribution with the appropriate statistics.
+new_data = voting_data[voting_data$Votes_Total > 100,] 
+new_data$Bond_Measure_Approval = (new_data$VotesFor) / (new_data$Votes_Total)
+hist(new_data$Bond_Measure_Approval, main = "Bond Approval Rate", xlab = "Bond Approval Percentage")
+print(mean(new_data$Bond_Measure_Approval))
+print(median(new_data$Bond_Measure_Approval))
+print(sd(new_data$Bond_Measure_Approval))
+print(fivenum(new_data$Bond_Measure_Approval))
+print(IQR(new_data$Bond_Measure_Approval))
+
+# Question 4: Is the margin a bond was approved by related to its cost?
+
+plot(new_data$Bond_Measure_Approval, new_data$Amount, main = "Cost of Bond vs Bond Approval Rate", xlab = "Bond Approval Rate", ylab = "Cost of Bond")
+cor(new_data$Bond_Measure_Approval, new_data$Amount)
+
+
