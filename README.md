@@ -1,2 +1,2 @@
 # Oct15_Practice
-The Huzz gon love this...
+Eat Samosas
